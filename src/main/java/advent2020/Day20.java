@@ -1,13 +1,18 @@
 package advent2020;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Day20 {
+    private static List<String> MONSTER =
+            Arrays.asList("                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   ");
     private static List<String> lines = FileReader.readFile("src/main/resources/day20input.txt");
 
     /**
@@ -17,46 +22,41 @@ public class Day20 {
      * know for sure who are its neighbors.
      */
     public static void main(String... args) {
-        Map<Integer, Tile> tiles = parse(lines);
-        System.out.println("Done reading");
+        List<Tile> tiles = parse(lines);
         // Mop from edge to tiles that have this edge
-        Map<Edge, List<Integer>> edgeToTileNums = new HashMap<>();
         Map<Edge, List<Tile>> edgeToTiles = new HashMap<>();
-        for (Map.Entry<Integer, Tile> entry : tiles.entrySet()) {
-            int tileNum  = entry.getKey();
-            Tile tile = entry.getValue();
+        for (Tile tile : tiles) {
             for (Edge edge : tile.edges()) {
-                edgeToTileNums.computeIfAbsent(edge, k -> new ArrayList<>()).add(tileNum);
                 edgeToTiles.computeIfAbsent(edge, k -> new ArrayList<>()).add(tile);
             }
         }
         // Edges that appear in exactly one tile (unique edges)
-        List<Edge> uniqueEdges = edgeToTileNums.entrySet().stream()
+        List<Edge> uniqueEdges = edgeToTiles.entrySet().stream()
                 .filter(e -> e.getValue().size() == 1)
-                .map(e -> e.getKey())
+                .map(Entry::getKey)
                 .collect(Collectors.toList());
         // Tiles that have 2 unique edges.
         long prod = 1;
         List<Tile> corners = new ArrayList<>();
-        for (Map.Entry<Integer, Tile> entry : tiles.entrySet()) {
-            List<Edge> dest = new ArrayList<>();
-            dest.addAll(uniqueEdges);
-            dest.retainAll(entry.getValue().edges());
+        for (Tile tile : tiles) {
+            List<Edge> dest = new ArrayList<>(uniqueEdges);
+            dest.retainAll(tile.edges());
             if (dest.size() == 2) {
-                prod *= entry.getKey();
-                corners.add(entry.getValue());
+                prod *= tile.tileNum;
+                corners.add(tile);
             }
         }
-        System.out.println(prod);
+        System.out.println("Product of corners: " + prod);
 
         int N = 12;
-
         Tile[][] image = new Tile[N][N];
         for (int row = 0; row < N; row++) {
             for (int col = 0; col < N; col++) {
                 Tile t;
                 if (row == 0 && col == 0) {
-                    t = corners.get(0);
+                    // Place a corner edge on the north-west corner
+                    t = corners.get(1);
+                    // Orient it so that its unique edges are facing outside
                     orient(t, uniqueEdges, uniqueEdges);
                 } else if (col == 0) {
                     Tile above = image[row - 1][col];
@@ -66,6 +66,8 @@ public class Day20 {
                     if (t == above) {
                         t = two.get(1);
                     }
+                    // For the first column (other than the corner) the north edge needs to
+                    // match the edge above, and the west image is unique
                     orient(t, uniqueEdges, Collections.singletonList(north));
                 } else {
                         Tile left = image[row][col - 1];
@@ -75,7 +77,7 @@ public class Day20 {
                         if (t == left) {
                             t = two.get(1);
                         }
-                        List toNorth;
+                        List<Edge> toNorth;
                         if (row == 0) {
                             toNorth = uniqueEdges;
                         } else {
@@ -86,8 +88,58 @@ public class Day20 {
                 image[row][col] = t;
             }
         }
-        System.out.println("Done placing tiles");
+        int NN = 12 * (10 -2); // 12 tiles per row/col, each one has 10 digits, and remove the edges.
+        String[][] actualImage = new String[NN][];
+        int l = 0;
+        for (int row = 0; row < N; row++) {
+            for (int lineNum = 1; lineNum < 9; lineNum++) {
+                String line = "";
+                for (int col = 0; col < N; col++) {
+                    line += image[row][col].lines.get(lineNum).substring(1, 9);
+                }
+                actualImage[l++] = line.split("");
+            }
+        }
 
+        // x, y are the coordinates of the MONSTER digits
+        int M = MONSTER.stream().map(s -> s.replaceAll(" ", "")).mapToInt(String::length).sum();
+        int[] x = new int[M];
+        int[] y = new int[M];
+        int k = 0;
+        for (int i = 0; i < MONSTER.size(); i++) {
+            String m = MONSTER.get(i);
+            for (int j = 0; j < m.length(); j++) {
+                if (m.charAt(j) == "#".charAt(0)) {
+                    x[k] = i;
+                    y[k] = j;
+                    k++;
+                }
+            }
+        }
+
+        // When starting with corner #1, no need to rotate or flip the actual image in order to find
+        // monsters (which is not the case when starting with any of the other corners).
+        for (int I = 0; I < NN - MONSTER.size(); I++) {
+            for (int J = 0; J < NN - MONSTER.get(0).length(); J++) {
+                int II = I;
+                int JJ = J;
+                boolean match = IntStream.range(0, x.length)
+                        .allMatch(i -> !".".equals(actualImage[II + x[i]][JJ + y[i]]));
+                if (match) {
+                    IntStream.range(0, x.length).forEach(i -> actualImage[II + x[i]][JJ + y[i]] = "O");
+                }
+            }
+        }
+
+        int roughness = 0;
+        for (int i = 0; i < NN; i++) {
+            for (int j = 0; j < NN; j++) {
+                if ("#".equals(actualImage[i][j])) {
+                    roughness++;
+                }
+            }
+        }
+        System.out.println("Roughness: " + roughness);
     }
 
     /**
@@ -114,13 +166,13 @@ public class Day20 {
         return tile;
     }
 
-    private static Map<Integer, Tile> parse(List<String> lines) {
-        Map<Integer, Tile> tiles = new HashMap<>();
+    private static List<Tile> parse(List<String> lines) {
+        List<Tile> tiles = new ArrayList<>();
         List<String> tile = new ArrayList<>();
         int tileNumber = -1;
         for (String next : lines) {
             if (next.isEmpty()) {
-                tiles.put(tileNumber, new Tile(tile));
+                tiles.add(new Tile(tileNumber, tile));
                 tile = new ArrayList<>();
             } else if (next.contains("Tile")) {
                 tileNumber = Integer.parseInt(next.split("[ :]")[1]);
@@ -132,13 +184,15 @@ public class Day20 {
     }
 
     private static class Tile {
+        int tileNum;
         Edge south;
         Edge north;
         Edge east;
         Edge west;
         List<String> lines = new ArrayList<>();
 
-        Tile(List<String> lines) {
+        Tile(int tileNum, List<String> lines) {
+            this.tileNum = tileNum;
             this.lines.addAll(lines);
             north = new Edge(lines.get(0));
             south = new Edge(lines.get(lines.size() - 1));
