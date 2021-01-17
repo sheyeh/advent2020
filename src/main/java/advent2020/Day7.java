@@ -57,8 +57,7 @@ public class Day7 {
     }
 
     private static boolean containsAny(Collection<String> a, Collection<String> b) {
-        Set<String> temp = new HashSet<>();
-        temp.addAll(a);
+        Set<String> temp = new HashSet<>(a);
         temp.retainAll(b);
         return !temp.isEmpty();
     }
@@ -89,7 +88,7 @@ public class Day7 {
                 for (int i = 1; i < items.length; i++) {
                     Matcher matcher = PATTERN.matcher(items[i]);
                     matcher.matches();
-                    counts.add(Integer.valueOf(matcher.group(1)));
+                    counts.add(Integer.parseInt(matcher.group(1)));
                     content.add(matcher.group(2));
                 }
             }

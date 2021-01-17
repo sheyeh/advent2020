@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Day15 {
-    private static final List<Integer> input = Arrays.asList(new Integer[]{0,13,16,17,1,10,6});
+    private static final List<Integer> input = Arrays.asList(0,13,16,17,1,10,6);
 
     public static void main(String... args) {
         q1(2020);

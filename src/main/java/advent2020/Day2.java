@@ -36,8 +36,8 @@ public class Day2 {
         private Line(String s) {
             Matcher m = PATTERN.matcher(s);
             m.matches();
-            min = Integer.valueOf(m.group(1));
-            max = Integer.valueOf(m.group(2));
+            min = Integer.parseInt(m.group(1));
+            max = Integer.parseInt(m.group(2));
             letter = m.group(3);
             password = m.group(4);
         }

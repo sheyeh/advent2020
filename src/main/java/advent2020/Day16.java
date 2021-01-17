@@ -1,6 +1,7 @@
 package advent2020;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,7 +82,7 @@ public class Day16 {
         return validTickets;
     }
 
-    private static final boolean valid(int val, List<Range> ranges) {
+    private static boolean valid(int val, List<Range> ranges) {
         return ranges.stream().anyMatch(r -> r.valid(val));
     }
 
@@ -91,7 +92,7 @@ public class Day16 {
         for (String token : tokens) {
             if (token.contains("-")) {
                 String[] vals = token. split("-");
-                ranges.add(new Range(Integer.valueOf(vals[0]), Integer.valueOf(vals[1])));
+                ranges.add(new Range(Integer.parseInt(vals[0]), Integer.parseInt(vals[1])));
             }
         }
         return ranges;
@@ -162,7 +163,7 @@ public class Day16 {
 
         static List<Range> merge(List<Range> list) {
             List<Range> list2 = list.stream()
-                    .sorted((r1, r2) -> Integer.compare(r1.from, r2.from))
+                    .sorted(Comparator.comparingInt(r -> r.from))
                     .collect(Collectors.toList());
             int i = 1;
             Range last = list2.get(0);

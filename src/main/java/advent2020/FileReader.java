@@ -15,8 +15,7 @@ import java.util.stream.Stream;
 public class FileReader {
     public static List<String> readFile(String fileName) {
         try {
-            return Files.readAllLines(Paths.get(fileName)).stream()
-                    .collect(Collectors.toList());
+            return Files.readAllLines(Paths.get(fileName));
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

@@ -28,8 +28,7 @@ public class Day8 {
     }
 
     private static List<String> newOps(int i) {
-        List<String> newOps = new ArrayList<>();
-        newOps.addAll(ops);
+        List<String> newOps = new ArrayList<>(ops);
         String newOp = null;
         String op = ops.get(i);
         if (op.startsWith("jmp")) {
@@ -50,10 +49,10 @@ public class Day8 {
             if (op.startsWith("nop")) {
                 lineNumber++;
             } else if (op.startsWith("acc")) {
-                cum += Integer.valueOf(op.substring(4));
+                cum += Integer.parseInt(op.substring(4));
                 lineNumber++;
             } else if (op.startsWith("jmp")) {
-                lineNumber += Integer.valueOf(op.substring(4));
+                lineNumber += Integer.parseInt(op.substring(4));
             }
             lineNumber = lineNumber % ops.size();
         }

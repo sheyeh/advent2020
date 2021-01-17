@@ -114,7 +114,7 @@ public class Day19 {
     private interface Rule {
         default boolean match(String s) {
             return s.matches(this.toString());
-        };
+        }
     }
 
     private static class SimpleRule implements Rule {

@@ -42,7 +42,7 @@ public class Day6 {
                 declaration.clear();
                 first = true;
             } else {
-                List list = Arrays.stream(line.split("")).collect(Collectors.toList());
+                List<String> list = Arrays.stream(line.split("")).collect(Collectors.toList());
                 if (first) {
                     declaration.addAll(list);
                     first = false;

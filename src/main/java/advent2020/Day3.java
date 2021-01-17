@@ -15,8 +15,8 @@ public class Day3 {
         System.out.println(trees(3, 1));
         Integer[][] values = {{1,1}, {3,1}, {5,1}, {7,1}, {1,2}};
         long prod = 1;
-        for (int i = 0; i < values.length; i++) {
-            prod *= trees(values[i][0], values[i][1]);
+        for (Integer[] value : values) {
+            prod *= trees(value[0], value[1]);
         }
         System.out.println(prod);
     }

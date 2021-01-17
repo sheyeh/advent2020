@@ -16,13 +16,13 @@ public class Day12 {
 
     private static void q1() {
         State state = new State(Action.E, 0, 0);
-        instructions.stream().forEach(state::move);
+        instructions.forEach(state::move);
         System.out.println(state.manhattanCoordinates());
     }
 
     private static void q2() {
         StateWithWaypoint state = new StateWithWaypoint(0, 0, 1, 10);
-        instructions.stream().forEach(state::move);
+        instructions.forEach(state::move);
         System.out.println(state.manhattanCoordinates());
     }
 
@@ -32,7 +32,7 @@ public class Day12 {
 
         Instruction(String instruction) {
             direction = Action.valueOf(instruction.substring(0, 1));
-            value = Integer.valueOf(instruction.substring(1));
+            value = Integer.parseInt(instruction.substring(1));
         }
 
         public String toString() {
@@ -148,7 +148,8 @@ public class Day12 {
         /**
          * Rotate left the number of steps, each one is 90 degrees.
          * To rotate right call this with negative argument.
-         * @param steps
+         *
+         * @param steps number of steps to rotate
          */
         void rotate(int steps) {
             while (steps < 0) {

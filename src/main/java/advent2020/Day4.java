@@ -41,10 +41,10 @@ public class Day4 {
     }
 
     private static final List<String> REQUIRED_FILEDS =
-            Arrays.asList(new String[]{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"});
+            Arrays.asList("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid");
 
     private static final List<String> VALID_ECLS =
-            Arrays.asList(new String[]{"amb", "blu", "brn", "gry", "grn", "hzl", "oth"});
+            Arrays.asList("amb", "blu", "brn", "gry", "grn", "hzl", "oth");
 
     private static class Passport {
         Map<String, String> map;
@@ -91,7 +91,7 @@ public class Day4 {
             String hgt = map.getOrDefault("hgt", "");
             Matcher match = HGT_PATTERN.matcher(hgt);
             if (match.matches()) {
-                int height = Integer.valueOf(match.group(1));
+                int height = Integer.parseInt(match.group(1));
                 switch (match.group(2)) {
                     case "cm": return height >= 150 && height <= 193;
                     case "in": return height >= 59 && height <= 76;
@@ -113,7 +113,7 @@ public class Day4 {
         }
 
         private boolean validYear(String key, int min, int max) {
-            int val = Integer.valueOf(map.getOrDefault(key, "-1"));
+            int val = Integer.parseInt(map.getOrDefault(key, "-1"));
             return val >= min && val <= max;
         }
 

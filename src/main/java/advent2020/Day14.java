@@ -15,10 +15,9 @@ public class Day14 {
     public static void main(String... args) {
         q1();
         q2();
-
     }
 
-    private static final void q1() {
+    private static void q1() {
         Map<Integer, Long> values = new HashMap<>();
         long zeroMask = 0;
         long onesMask = 0;
@@ -30,8 +29,8 @@ public class Day14 {
             } else {
                 Matcher matcher = mem.matcher(line);
                 matcher.matches();
-                int key = Integer.valueOf(matcher.group(1));
-                int val = Integer.valueOf(matcher.group(2));
+                int key = Integer.parseInt(matcher.group(1));
+                int val = Integer.parseInt(matcher.group(2));
                 long val2 = val & zeroMask | onesMask;
                 values.put(key, val2);
             }
@@ -39,7 +38,7 @@ public class Day14 {
         System.out.println(values.values().stream().mapToLong(Long::longValue).sum());
     }
 
-    private static final void q2() {
+    private static void q2() {
         Map<Long, Long> values = new HashMap<>();
         String mask = null;
         for (String line : input) {
@@ -48,8 +47,8 @@ public class Day14 {
             } else {
                 Matcher matcher = mem.matcher(line);
                 matcher.matches();
-                long key = Integer.valueOf(matcher.group(1));
-                long val = Integer.valueOf(matcher.group(2));
+                long key = Integer.parseInt(matcher.group(1));
+                long val = Integer.parseInt(matcher.group(2));
                 List<Long> addresses = addresses(mask, key);
                 addresses.forEach(k -> values.put(k, val));
             }
@@ -69,7 +68,7 @@ public class Day14 {
         // take the base address and OR it with the mask where Xs are zeros
         long base1 = baseAddress | mask(mask, "0");
         // Now set to zero all the bits that are X in the mask.
-        final long base2 = base1 & mask(mask.replaceAll("0", "1"), "0");;
+        final long base2 = base1 & mask(mask.replaceAll("0", "1"), "0");
         return masks(mask).stream()
                 .map(m -> m | base2)
                 .collect(Collectors.toList());
@@ -80,7 +79,7 @@ public class Day14 {
      * where Xs are replaced with zeros and ones.
      */
     private static List<Long> masks(String mask) {
-        List result = new ArrayList<>();
+        List<Long> result = new ArrayList<>();
         int loc = mask.indexOf("X");
         if (loc == -1) {
             result.add(Long.parseLong(mask, 2));
