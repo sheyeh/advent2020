@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Day20 {
-    private static List<String> MONSTER =
+    private static final List<String> MONSTER =
             Arrays.asList("                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   ");
-    private static List<String> lines = FileReader.readFile("src/main/resources/day20input.txt");
+    private static final List<String> lines = FileReader.readFile("src/main/resources/day20input.txt");
 
     /**
      * The solution is based on the fact that there are exactly four tiles where each of
@@ -22,7 +22,7 @@ public class Day20 {
      * know for sure who are its neighbors.
      */
     public static void main(String... args) {
-        List<Tile> tiles = parse(lines);
+        List<Tile> tiles = parse();
         // Mop from edge to tiles that have this edge
         Map<Edge, List<Tile>> edgeToTiles = new HashMap<>();
         for (Tile tile : tiles) {
@@ -124,7 +124,7 @@ public class Day20 {
                 int II = I;
                 int JJ = J;
                 boolean match = IntStream.range(0, x.length)
-                        .allMatch(i -> !".".equals(actualImage[II + x[i]][JJ + y[i]]));
+                        .noneMatch(i -> ".".equals(actualImage[II + x[i]][JJ + y[i]]));
                 if (match) {
                     IntStream.range(0, x.length).forEach(i -> actualImage[II + x[i]][JJ + y[i]] = "O");
                 }
@@ -149,9 +149,8 @@ public class Day20 {
      * @param tile the tile to rotate
      * @param toWest list of possible west edges
      * @param toNorth list of possible north edges
-     * @return the rotated tile
      */
-    private static Tile orient(Tile tile, List<Edge> toWest, List<Edge> toNorth) {
+    private static void orient(Tile tile, List<Edge> toWest, List<Edge> toNorth) {
         int r = 0;
         while (!toWest.contains(tile.west) || !toNorth.contains(tile.north)) {
             tile.rotate();
@@ -163,14 +162,13 @@ public class Day20 {
                 throw new RuntimeException("Could not find orientation");
             }
         }
-        return tile;
     }
 
-    private static List<Tile> parse(List<String> lines) {
+    private static List<Tile> parse() {
         List<Tile> tiles = new ArrayList<>();
         List<String> tile = new ArrayList<>();
         int tileNumber = -1;
-        for (String next : lines) {
+        for (String next : Day20.lines) {
             if (next.isEmpty()) {
                 tiles.add(new Tile(tileNumber, tile));
                 tile = new ArrayList<>();
@@ -211,27 +209,25 @@ public class Day20 {
         /**
          * Flip north - south
          */
-        Tile flip() {
+        void flip() {
             west = west.reverse();
             east = east.reverse();
             Edge temp = north;
             north = south;
             south = temp;
             flipLines();
-            return this;
         }
 
         /**
          * Rotate 90 degrees clockwise
          */
-        Tile rotate() {
+        void rotate() {
             Edge temp = north;
             north = west.reverse();
             west = south;
             south = east.reverse();
             east = temp;
             rotateLines();
-            return this;
         }
 
         private void rotateLines() {
