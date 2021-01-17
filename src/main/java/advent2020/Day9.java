@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Day9 {
-    private static List<Long> vals = FileReader.readFile("src/advent2020/input/day9input.txt").stream()
+    private static List<Long> vals = FileReader.readFile("src/main/resources/day9input.txt").stream()
             .map(Long::valueOf).collect(Collectors.toList());
     private static int LEN = 25;
 

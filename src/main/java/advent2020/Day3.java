@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Day3 {
     private static final char TREE = "#".charAt(0);
-    private static final List<String> lines = FileReader.readFile("src/advent2020/input/day3input.txt");
+    private static final List<String> lines = FileReader.readFile("src/main/resources/day3input.txt");
     private static final int L = lines.get(0).length();
 
     public static void main(String... args) throws IOException {

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day13 {
-    private static final List<String> input = FileReader.readFile("src/advent2020/input/day13input.txt");
+    private static final List<String> input = FileReader.readFile("src/main/resources/day13input.txt");
     private static final int arrival = Integer.valueOf(input.get(0));
     private static List<Integer> ids = Arrays.stream(input.get(1).split(","))
             .map(s -> s.equals("x") ? "-1" : s)

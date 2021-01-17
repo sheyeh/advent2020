@@ -30,12 +30,12 @@ public class Day17 {
     }
 
     private static State initialize() {
-        List<String> input = FileReader.readFile("src/advent2020/input/day17input.txt");
+        List<String> input = FileReader.readFile("src/main/resources/day17input.txt");
         return new State(input);
     }
 
     private static State4D initialize4D() {
-        List<String> input = FileReader.readFile("src/advent2020/input/day17input.txt");
+        List<String> input = FileReader.readFile("src/main/resources/day17input.txt");
         return new State4D(input);
     }
 

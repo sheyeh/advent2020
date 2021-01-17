@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class Day11 {
-    private static List<String> input = FileReader.readFile("src/advent2020/input/day11input.txt");
+    private static List<String> input = FileReader.readFile("src/main/resources/day11input.txt");
     private static int N = input.size();
     private static int M = input.get(0).length();
     private static final State[][] initial = seats(input);

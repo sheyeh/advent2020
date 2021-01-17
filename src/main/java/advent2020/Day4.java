@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Day4 {
     public static void main(String... args) {
-        List<String> lines = FileReader.readFile("src/advent2020/input/day4input.txt");
+        List<String> lines = FileReader.readFile("src/main/resources/day4input.txt");
         List<Passport> infos = infos(lines);
 //        for (Passport info : infos) {
 //            System.out.println(info + " : " + info.valid());

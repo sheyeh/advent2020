@@ -26,7 +26,7 @@ public class Day7 {
     }
 
     private static List<Rule> rules() {
-        return FileReader.readFile("src/advent2020/input/day7input.txt").stream()
+        return FileReader.readFile("src/main/resources/day7input.txt").stream()
                 .map(Rule::new)
                 .collect(Collectors.toList());
     }

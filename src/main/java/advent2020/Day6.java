@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Day6 {
-    private static List<String> lines = FileReader.readFile("src/advent2020/input/day6input.txt");
+    private static List<String> lines = FileReader.readFile("src/main/resources/day6input.txt");
     public static void main(String... args) {
         q1();
         q2();

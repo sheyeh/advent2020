@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class Day19 {
 
-    private static List<String> lines = FileReader.readFile("src/advent2020/input/day19input.txt");
+    private static List<String> lines = FileReader.readFile("src/main/resources/day19input.txt");
     private static Map<Boolean, List<String>> input = lines.stream()
             .filter(l -> !l.isEmpty())
             .collect(Collectors.groupingBy(l -> l.contains(":")));

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class Day2 {
 
     public static void main(String... args) throws IOException {
-        List<Line> lines = FileReader.readFile("src/advent2020/input/day2input.txt")
+        List<Line> lines = FileReader.readFile("src/main/resources/day2input.txt")
                 .stream()
                 .map(Line::new)
                 .collect(Collectors.toList());

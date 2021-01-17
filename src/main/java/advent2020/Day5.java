@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class Day5 {
     public static void main(String... args) {
-        List<String> boardings = FileReader.readFile("src/advent2020/input/day5input.txt");
+        List<String> boardings = FileReader.readFile("src/main/resources/day5input.txt");
         System.out.println(boardings.stream().map(Day5::id).max(Integer::compareTo).get());
         int minRow = boardings.stream().map(Day5::id).min(Integer::compareTo).get();
         int maxRow = boardings.stream().map(Day5::id).max(Integer::compareTo).get();

@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 public class Day12 {
     private static final List<Instruction> instructions =
-            FileReader.readFile("src/advent2020/input/day12input.txt").stream()
+            FileReader.readFile("src/main/resources/day12input.txt").stream()
             .map(Instruction::new).collect(Collectors.toList());
 
     public static void main(String... args) {

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day14 {
-    private static final List<String> input = FileReader.readFile("src/advent2020/input/day14input.txt");
+    private static final List<String> input = FileReader.readFile("src/main/resources/day14input.txt");
     private static final Pattern mem = Pattern.compile("mem\\[(\\d*)\\] = (\\d*)");
 
     public static void main(String... args) {

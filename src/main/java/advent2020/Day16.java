@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Day16 {
-    private static List<String> input  = FileReader.readFile("src/advent2020/input/day16input.txt");
+    private static List<String> input  = FileReader.readFile("src/main/resources/day16input.txt");
     private static Map<String, List<Range>> ticketFields = new HashMap<>();
     private static Map<String, Integer> fieldMapping = new HashMap<>();
     private static List<Integer[]> validTickets;

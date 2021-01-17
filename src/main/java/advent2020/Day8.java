@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Day8 {
-    private static List<String> ops = FileReader.readFile("src/advent2020/input/day8input.txt");
+    private static List<String> ops = FileReader.readFile("src/main/resources/day8input.txt");
     private static Set<Integer> executed = new HashSet<>();
     private static int lineNumber;
     private static boolean done;

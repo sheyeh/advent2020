@@ -11,7 +11,7 @@ public class Day1 {
     private static List<Integer> lines;
 
     public static void main(String... args) throws IOException {
-        lines = FileReader.readFile("src/advent2020/input/day1input.txt")
+        lines = FileReader.readFile("src/main/resources/day1input.txt")
                 .stream()
                 .map(Integer::valueOf)
                 .sorted()

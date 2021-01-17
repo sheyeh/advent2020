@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Day20 {
-    private static List<String> lines = FileReader.readFile("src/advent2020/input/day20input.txt");
+    private static List<String> lines = FileReader.readFile("src/main/resources/day20input.txt");
 
     /**
      * The solution is based on the fact that there are exactly four tiles where each of

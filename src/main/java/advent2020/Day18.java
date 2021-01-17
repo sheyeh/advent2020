@@ -5,7 +5,7 @@ import java.util.List;
 public class Day18 {
     private static boolean plusPresedence;
     public static void main(String... args) {
-        List<String> lines = FileReader.readFile("src/advent2020/input/day18input.txt");
+        List<String> lines = FileReader.readFile("src/main/resources/day18input.txt");
         for (boolean p : new boolean[]{false, true}) {
             plusPresedence = p;
             System.out.println(lines.stream().map(Day18::parse).mapToLong(Expression::apply).sum());

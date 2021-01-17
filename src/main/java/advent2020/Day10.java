@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Day10 {
-    private static List<Integer> joltages = FileReader.readFile("src/advent2020/input/day10input.txt").stream()
+    private static List<Integer> joltages = FileReader.readFile("src/main/resources/day10input.txt").stream()
             .map(Integer::valueOf)
             .sorted()
             .collect(Collectors.toList());
