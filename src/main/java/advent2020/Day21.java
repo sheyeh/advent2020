@@ -2,8 +2,6 @@ package advent2020;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,46 +17,14 @@ public class Day21 {
     private static final Set<String> allAllergens = new HashSet<>();
     private static final Set<String> allIngredients = new HashSet<>();
     private static final List<Food> allFoods = new ArrayList<>();
+    private static List<String> ingredientsWithoutAllergens;
 
     public static void main(String... args) {
         parseLines();
-        List<String> ingredientsWithoutAllergens = part1();
-        Map<String, Set<String>> allergenToIngredients = new HashMap<>();
-        for (Food f : allFoods) {
-            Set<String> ingredients = new HashSet<>(f.ingredients);
-            ingredients.removeAll(ingredientsWithoutAllergens);
-            System.out.println(f.allergens + " : " + ingredients);
-            for (String a : f.allergens) {
-                Set<String> ing = allergenToIngredients.get(a);
-                if (ing == null) {
-                    allergenToIngredients.put(a, new HashSet<>(ingredients));
-                } else {
-                    ing.retainAll(ingredients);
-                }
-            }
-        }
-        System.out.println(allergenToIngredients);
-        for (int i = 0; i < 10; i++) {
-            Set<String> done = allergenToIngredients.entrySet().stream().filter((e -> e.getValue().size() == 1)).map(Entry::getKey).collect(Collectors.toSet());
-            for (String d : done) {
-                for (Entry<String, Set<String>> entry : allergenToIngredients.entrySet()) {
-                    if (!entry.getKey().equals(d)) {
-                        entry.getValue().removeAll(allergenToIngredients.get(d));
-                    }
-                }
-            }
-            System.out.println(allergenToIngredients);
-        }
-        System.out.println(allergenToIngredients.entrySet().stream()
-                .sorted(Comparator.comparing(Entry::getKey))
-                .map(e -> e.getValue().iterator().next())
-                .collect(Collectors.joining(",")));
-
+        ingredientsWithoutAllergens = part1();
+        part2();
     }
 
-    private static List<String> sorted(Collection<String> list) {
-        return list.stream().sorted().collect(Collectors.toList());
-    }
     /**
      * When a food contains an allergen, it means the allergen is in one of the food's ingredients.
      * Therefore it cannot be in any of the ingredients not in that food. This is true for all foods the
@@ -88,6 +54,60 @@ public class Day21 {
         return ingredients;
     }
 
+    /**
+     * Now that we know which ingredients can't have allergens, ignore these ingredients.
+     * Only consider ingredients that do have allergens. Each has exactly one allergen.
+     * Create a map from allergen to ingredidents that can have it. The value is the
+     * intersection of ingredients over all foods that have the allergen as one of its
+     * allergens. For example, if we have Food 1 with allergen A and ingredients X, Y,
+     * and Food 2 with allergens A, B and ingredients X, Z then this is enough to determine
+     * that ingredient X has allergen A.
+     */
+    private static void part2() {
+        // Map from allergen to possible ingredients.
+        Map<String, List<String>> allergenToIngredients = new HashMap<>();
+        for (Food f : allFoods) {
+            Set<String> ingredients = new HashSet<>(f.ingredients);
+            ingredients.removeAll(ingredientsWithoutAllergens);
+            for (String a : f.allergens) {
+                List<String> ing = allergenToIngredients.get(a);
+                if (ing == null) {
+                    allergenToIngredients.put(a, new ArrayList<>(ingredients));
+                } else {
+                    ing.retainAll(ingredients);
+                }
+            }
+        }
+
+        /*
+          At this point, allergenToIngredients may have multiple possible ingredients for
+          some allergens. Take the entries in the table where the list of ingredients is of
+          size one. For those we know what the allergen is. If they appear in the list of
+          ingredients of other allergens then remove them from those lists. Repeat until
+          all the lists are of size 1.
+         */
+        while (allergenToIngredients.values().stream().map(List::size).anyMatch(i -> i > 1)) {
+            Set<String> knownAllergens = allergenToIngredients.entrySet().stream()
+                    .filter((e -> e.getValue().size() == 1))
+                    .map(Entry::getKey)
+                    .collect(Collectors.toSet());
+
+            for (String a : knownAllergens) {
+                String knownIngredient = allergenToIngredients.get(a).get(0);
+                for (Entry<String, List<String>> entry : allergenToIngredients.entrySet()) {
+                    if (!entry.getKey().equals(a)) {
+                        entry.getValue().remove(knownIngredient);
+                    }
+                }
+            }
+        }
+        System.out.println(allergenToIngredients);
+        System.out.println("Ingredients sorted by allergens : " + allergenToIngredients.entrySet().stream()
+                .sorted(Entry.comparingByKey())
+                .map(e -> e.getValue().get(0))
+                .collect(Collectors.joining(",")));
+    }
+
     private static void parseLines() {
         for (String line : lines) {
             Food food = new Food(line);
@@ -106,22 +126,18 @@ public class Day21 {
         System.out.println(allAllergens.size() + " allergens");
     }
 
-    private static int INDEX = 0;
-
     private static class Food {
-        int index;
         List<String> ingredients;
         List<String> allergens;
 
         public Food(String line) {
-            this.index = ++INDEX;
             String[] parts = line.replaceAll("[(),]","").split(" contains ");
             ingredients = Arrays.asList(parts[0].split(" "));
             allergens = Arrays.asList(parts[1].split(" "));
         }
 
         public String toString() {
-            return "Food #" + index + " : ingredients : " + ingredients + " allergens : " + allergens;
+            return "ingredients : " + ingredients + " allergens : " + allergens;
         }
     }
 
